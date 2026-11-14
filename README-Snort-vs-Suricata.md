@@ -428,11 +428,8 @@ Verifikasi versi:
 snort -V
 ```
 
-Catat versi Snort yang benar-benar terpasang. Jika versi berbeda dari 2.9.20 yang dicantumkan materi, tuliskan perbedaannya pada dokumentasi.
+<img width="1281" height="492" alt="image" src="https://github.com/user-attachments/assets/7669d5ce-b807-440c-9980-abdd14df583d" />
 
-<!-- SS D.1 — Pemeriksaan paket Snort -->
-<!-- SS D.2 — Instalasi Snort -->
-<!-- SS D.3 — Versi Snort -->
 
 ### D.3 Konfigurasi Snort dan HOME_NET
 
@@ -464,8 +461,15 @@ Periksa juga direktori rules dan pastikan rule yang diperlukan dimuat oleh konfi
 
 > Lokasi file dan sintaks dapat berbeda menurut versi Snort. Gunakan file konfigurasi yang benar-benar tersedia pada sistem.
 
-<!-- SS D.4 — Konfigurasi HOME_NET Snort -->
-<!-- SS D.5 — Konfigurasi rule Snort -->
+<img width="1278" height="292" alt="image" src="https://github.com/user-attachments/assets/ca8c349c-26c3-47de-9ecf-72a0a6133e1e" />
+
+<img width="1281" height="712" alt="image" src="https://github.com/user-attachments/assets/207c132c-6413-472b-ac7c-3c7dfa3b50c8" />
+
+<img width="1281" height="633" alt="image" src="https://github.com/user-attachments/assets/047c8714-3800-463b-94d9-2d2c14754a89" />
+
+<img width="1281" height="634" alt="image" src="https://github.com/user-attachments/assets/4f8bd269-b795-474b-9508-801c54e562ab" />
+
+<img width="1285" height="303" alt="image" src="https://github.com/user-attachments/assets/746b1007-69c7-4049-ad78-026cc2b30ec7" />
 
 ### D.4 Penambahan dan pemeriksaan Rules Snort
 
@@ -485,7 +489,10 @@ Dokumentasikan:
 
 Jika menggunakan rule khusus, simpan isi rule dan jelaskan pola lalu lintas yang hendak dideteksi. Jangan mengklaim rule mendeteksi serangan sebelum diuji.
 
-<!-- SS D.6 — Direktori dan rule Snort yang digunakan -->
+<img width="1281" height="760" alt="image" src="https://github.com/user-attachments/assets/798a49d7-a2c8-4bcd-a6ff-3533af367e1c" />
+
+<img width="1282" height="577" alt="image" src="https://github.com/user-attachments/assets/97937888-7144-43d2-8566-ac984e7497f9" />
+
 
 ### D.5 Instalasi komponen pendukung Web BASE
 
