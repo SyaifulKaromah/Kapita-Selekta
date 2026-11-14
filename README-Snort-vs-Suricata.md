@@ -680,19 +680,71 @@ Jika pengujian berhasil, konfigurasi Snort dinyatakan lolos pemeriksaan dan impl
 <img width="1283" height="746" alt="image" src="https://github.com/user-attachments/assets/8ef7bb15-c1da-4ce0-a6bb-850a08cc172a" />
 
 
-### D.6 Instalasi BASE
+### D.6 Konfigurasi Integrasi Snort dengan Barnyard2
 
-BASE (Basic Analysis and Security Engine) merupakan antarmuka berbasis web yang digunakan untuk menampilkan dan memeriksa alert Snort melalui browser.
+Setelah instalasi Barnyard2 berhasil dilakukan pada bagian D.3, tahap selanjutnya adalah mengintegrasikan Barnyard2 dengan Snort. Integrasi ini bertujuan agar event hasil deteksi Snort dapat diproses oleh Barnyard2 dan diteruskan ke database untuk ditampilkan melalui BASE.
 
-Materi acuan menggunakan BASE versi 1.4.5. Oleh karena itu, versi tersebut dijadikan acuan dalam pengembangan implementasi ini.
+#### 1. Pemeriksaan konfigurasi output Snort
 
-Sebelum instalasi, periksa ketersediaan sumber BASE dan dependensi yang diperlukan. Pastikan versi PHP, database, serta Apache2 yang digunakan sesuai dengan kebutuhan aplikasi.
+Periksa konfigurasi output pada file `snort.conf`:
 
-Jika BASE 1.4.5 tidak tersedia melalui repositori, metode instalasi harus mengikuti sumber distribusi atau dokumentasi versi yang digunakan. Catat sumber, versi, dan penyesuaian dependensi yang dilakukan.
+```bash
+sudo grep -nEi 'unified2|log_unified' /etc/snort/snort.conf
+```
 
-Jangan menganggap BASE telah terinstal hanya karena Apache2, PHP, dan database sudah berjalan.
+Snort perlu dikonfigurasi untuk menghasilkan output dalam format Unified2 agar dapat dibaca oleh Barnyard2.
 
-> Apabila BASE 1.4.5 mengalami kendala kompatibilitas dengan Linux Mint 22.3, dokumentasikan kendala tersebut. Jangan mengganti BASE dengan dashboard lain tanpa menjelaskan bahwa terdapat perubahan dari komponen pada materi acuan.
+#### 2. Pemeriksaan file konfigurasi Barnyard2
+
+Periksa file konfigurasi Barnyard2:
+
+```bash
+sudo ls -lah /usr/local/etc/
+```
+
+Buka file konfigurasi:
+
+```bash
+sudo nano /usr/local/etc/barnyard2.conf
+```
+
+Konfigurasi yang diperlukan mencakup:
+
+- Lokasi file output Unified2 Snort.
+- Lokasi file konfigurasi klasifikasi dan referensi Snort.
+- Identitas sensor.
+- Pengaturan koneksi database.
+
+<img width="1280" height="422" alt="image" src="https://github.com/user-attachments/assets/6a9eea11-471a-44bf-84ef-43fbc90ef60b" />
+
+#### 3. Persiapan database
+
+Sebelum Barnyard2 meneruskan event, database perlu disiapkan untuk menyimpan data alert.
+
+Tahapan ini mencakup:
+
+- Memastikan layanan MySQL/MariaDB berjalan.
+- Membuat database untuk penyimpanan alert.
+- Membuat akun database dan memberikan hak akses yang diperlukan.
+- Menyiapkan struktur tabel sesuai skema Barnyard2.
+
+<img width="1281" height="315" alt="image" src="https://github.com/user-attachments/assets/1a544732-8002-4c70-b07c-efeb6320e42b" />
+
+#### 4. Pengujian integrasi
+
+Setelah konfigurasi Snort, Barnyard2, dan database selesai, lakukan pengujian untuk memastikan seluruh komponen dapat berkomunikasi.
+
+Pengujian meliputi:
+
+1. Memastikan Snort menghasilkan file Unified2.
+2. Menjalankan Barnyard2 dengan konfigurasi yang telah dibuat.
+3. Memastikan Barnyard2 dapat membaca event dari Snort.
+4. Memeriksa apakah event berhasil diteruskan dan tersimpan di database.
+
+<img width="1281" height="527" alt="image" src="https://github.com/user-attachments/assets/d1b093f5-12fb-4902-be6f-5de1e1272f1a" />
+
+
+> Keberhasilan integrasi dinyatakan setelah event dari Snort berhasil diproses oleh Barnyard2 dan tersimpan di database. Penampilan alert melalui BASE dibahas pada tahap berikutnya.
 
 ### D.7 Konfigurasi dan Pengujian Web BASE
 
