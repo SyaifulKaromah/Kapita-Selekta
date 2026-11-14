@@ -713,7 +713,6 @@ Konfigurasi yang diperlukan mencakup:
 - Lokasi file output Unified2 Snort.
 - Lokasi file konfigurasi klasifikasi dan referensi Snort.
 - Identitas sensor.
-- Pengaturan koneksi database.
 
 <img width="1280" height="422" alt="image" src="https://github.com/user-attachments/assets/6a9eea11-471a-44bf-84ef-43fbc90ef60b" />
 
@@ -730,6 +729,9 @@ Tahapan ini mencakup:
 
 <img width="1281" height="315" alt="image" src="https://github.com/user-attachments/assets/1a544732-8002-4c70-b07c-efeb6320e42b" />
 
+<img width="1281" height="527" alt="image" src="https://github.com/user-attachments/assets/d1b093f5-12fb-4902-be6f-5de1e1272f1a" />
+
+
 #### 4. Pengujian integrasi
 
 Setelah konfigurasi Snort, Barnyard2, dan database selesai, lakukan pengujian untuk memastikan seluruh komponen dapat berkomunikasi.
@@ -741,7 +743,7 @@ Pengujian meliputi:
 3. Memastikan Barnyard2 dapat membaca event dari Snort.
 4. Memeriksa apakah event berhasil diteruskan dan tersimpan di database.
 
-<img width="1281" height="527" alt="image" src="https://github.com/user-attachments/assets/d1b093f5-12fb-4902-be6f-5de1e1272f1a" />
+<img width="1281" height="728" alt="image" src="https://github.com/user-attachments/assets/aaefa8c9-dcaa-4cb5-af1e-5ab2d80a3949" />
 
 
 > Keberhasilan integrasi dinyatakan setelah event dari Snort berhasil diproses oleh Barnyard2 dan tersimpan di database. Penampilan alert melalui BASE dibahas pada tahap berikutnya.
