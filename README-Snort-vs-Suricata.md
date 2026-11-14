@@ -40,7 +40,7 @@ Pengembangan dilakukan dengan menambahkan Suricata sebagai objek pembanding terh
 | IP LAN Kali                   | `192.168.56.10/24`                                                |
 | IP LAN Linux Mint             | `192.168.56.20/24`                                                |
 | Subnet pengujian              | `192.168.56.0/24`                                                 |
-| Jaringan virtual              | LAN Isolasi 1                                                     |
+| Jaringan virtual              | LAN Segment 1                                                     |
 | IDS utama sesuai materi       | Snort                                                             |
 | IDS pengembangan/pembanding   | Suricata                                                          |
 | Tools pengujian               | Metasploit Framework, tcpdump, Wireshark                          |
@@ -224,7 +224,7 @@ Spesifikasi vCPU, RAM, dan disk masing-masing VM harus dicatat dari konfigurasi 
 |:-----------------------|:------------------------------|
 | Attacker               | Kali Linux yang sama          |
 | Target                 | Linux Mint yang sama          |
-| Jaringan               | LAN Isolasi 1                 |
+| Jaringan               | LAN Segment 1                 |
 | IP attacker dan target | Tetap                         |
 | Layanan target         | Sama untuk Snort dan Suricata |
 | Skenario Metasploit    | Sama                          |
@@ -275,14 +275,14 @@ Merancang topologi jaringan dan hubungan antarperangkat berdasarkan kebutuhan pe
              |                             |
              +-------------+---------------+
                            |
-                    LAN ISOLASI 1
+                    LAN Segment 1
                     192.168.56.0/24
 ```
 
 Keterangan:
 
 - Adapter 1 pada kedua VM menggunakan NAT untuk kebutuhan internet dan pembaruan.
-- Adapter 2 pada kedua VM menggunakan LAN Isolasi 1 untuk lalu lintas pengujian.
+- Adapter 2 pada kedua VM menggunakan LAN Segment 1 untuk lalu lintas pengujian.
 - Kali Linux mengirimkan lalu lintas skenario melalui `eth1`.
 - Linux Mint menerima lalu lintas melalui `ens37`.
 - Snort atau Suricata memantau interface `ens37` secara bergantian.
@@ -290,7 +290,7 @@ Keterangan:
 
 <!-- SS C.1 — Konfigurasi Network Adapter Kali Linux di VMware -->
 <!-- SS C.2 — Konfigurasi Network Adapter Linux Mint di VMware -->
-<!-- SS C.3 — Topologi jaringan LAN Isolasi 1 -->
+<!-- SS C.3 — Topologi jaringan LAN Segment 1 -->
 
 ### C.3 Verifikasi interface Kali Linux
 
@@ -304,7 +304,7 @@ Rencana interface:
 | Interface | Fungsi         | IP                   |
 |:----------|:---------------|:---------------------|
 | `eth0`    | NAT / Internet | Periksa hasil aktual |
-| `eth1`    | LAN Isolasi 1  | `192.168.56.10/24`   |
+| `eth1`    | LAN Segment 1  | `192.168.56.10/24`   |
 
 <!-- SS C.4 — Output ip -br addr dan ip route Kali Linux -->
 
@@ -320,7 +320,7 @@ Rencana interface:
 | Interface | Fungsi         | IP                   |
 |:----------|:---------------|:---------------------|
 | `ens33`   | NAT / Internet | Periksa hasil aktual |
-| `ens37`   | LAN Isolasi 1  | `192.168.56.20/24`   |
+| `ens37`   | LAN Segment 1  | `192.168.56.20/24`   |
 
 Interface LAN tidak menggunakan default gateway. Default route internet menggunakan interface NAT.
 
@@ -657,7 +657,7 @@ Menjalankan sistem yang telah dibangun, menguji fungsinya, mengidentifikasi kend
 
 Sebelum setiap percobaan:
 
-1. Pastikan Kali Linux dan Linux Mint terhubung melalui LAN Isolasi 1.
+1. Pastikan Kali Linux dan Linux Mint terhubung melalui LAN Segment 1.
 2. Pastikan layanan target aktif dan siap menerima koneksi.
 3. Pastikan hanya IDS yang sedang diuji berjalan.
 4. Pastikan interface pemantauan adalah `ens37`.
@@ -1076,7 +1076,7 @@ Pastikan:
 
 - Kali menggunakan `192.168.56.10/24` pada `eth1`.
 - Linux Mint menggunakan `192.168.56.20/24` pada `ens37`.
-- Kedua VM menggunakan LAN Isolasi 1 yang sama.
+- Kedua VM menggunakan LAN Segment 1 yang sama.
 - Interface LAN dalam keadaan aktif.
 
 ## 4.3 APT mengalami error repositori CD-ROM
@@ -1113,7 +1113,7 @@ Periksa pesan error dan pastikan konfigurasi sesuai versi Suricata.
 Periksa:
 
 1. IDS memantau `ens37`.
-2. Lalu lintas benar-benar melewati LAN Isolasi 1.
+2. Lalu lintas benar-benar melewati LAN Segment 1.
 3. Rule yang sesuai telah dimuat.
 4. HOME_NET sesuai jaringan.
 5. Skenario uji menghasilkan lalu lintas yang dimaksud.
