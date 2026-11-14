@@ -731,6 +731,7 @@ Tahapan ini mencakup:
 
 <img width="1281" height="527" alt="image" src="https://github.com/user-attachments/assets/d1b093f5-12fb-4902-be6f-5de1e1272f1a" />
 
+<img width="1281" height="728" alt="image" src="https://github.com/user-attachments/assets/aaefa8c9-dcaa-4cb5-af1e-5ab2d80a3949" />
 
 #### 4. Pengujian integrasi
 
@@ -743,7 +744,7 @@ Pengujian meliputi:
 3. Memastikan Barnyard2 dapat membaca event dari Snort.
 4. Memeriksa apakah event berhasil diteruskan dan tersimpan di database.
 
-<img width="1281" height="728" alt="image" src="https://github.com/user-attachments/assets/aaefa8c9-dcaa-4cb5-af1e-5ab2d80a3949" />
+
 
 
 > Keberhasilan integrasi dinyatakan setelah event dari Snort berhasil diproses oleh Barnyard2 dan tersimpan di database. Penampilan alert melalui BASE dibahas pada tahap berikutnya.
