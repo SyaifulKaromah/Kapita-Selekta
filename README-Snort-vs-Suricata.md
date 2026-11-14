@@ -404,201 +404,392 @@ Analisis dan perbandingan
 
 ### D.1 Tujuan
 
-Menerapkan seluruh komponen sesuai rencana dan desain. Tahap implementasi mengikuti alur pada materi: instalasi Snort, penambahan rules, instalasi komponen pendukung, konfigurasi Snort, pengujian konfigurasi, instalasi BASE, konfigurasi BASE, dan pemeriksaan tampilan alert.
+Menerapkan seluruh komponen sesuai rencana dan desain. Tahap implementasi mengikuti diagram alir instalasi dan konfigurasi Snort IDS pada materi acuan, dimulai dari instalasi Snort, instalasi komponen pendukung, konfigurasi dan pengujian Snort, hingga instalasi serta konfigurasi BASE.
 
-> **Catatan kompatibilitas:** materi acuan menggunakan kombinasi Snort 2.9.20, Barnyard2, dan BASE 1.4.5. Komponen tersebut merupakan stack yang lebih lama. Pada Linux Mint 22.3, kompatibilitas paket dan dependensi harus diperiksa. Catat error dan versi aktual; jangan menyatakan BASE berhasil sebelum antarmukanya benar-benar dapat menampilkan alert.
+Suricata ditambahkan sebagai pengembangan penelitian untuk membandingkan kemampuan deteksi dan penggunaan sumber daya dengan Snort.
+
+> **Catatan kompatibilitas:** Materi acuan menggunakan kombinasi Snort 2.9.20, Barnyard2, dan BASE 1.4.5. Komponen tersebut merupakan stack yang lebih lama. Pada Linux Mint 22.3, kompatibilitas paket dan dependensi harus diperiksa. Catat versi dan kondisi aktual setiap komponen. Jangan menyatakan instalasi atau integrasi berhasil sebelum dilakukan verifikasi.
 
 ### D.2 Instalasi Snort
 
-Periksa paket yang tersedia:
+Snort merupakan Intrusion Detection System (IDS) utama dalam penelitian ini. Instalasi dilakukan pada Linux Mint yang berperan sebagai target sekaligus sensor IDS.
+
+Periksa ketersediaan paket Snort pada repositori:
 
 ```bash
 apt-cache policy snort
 ```
 
-Instal Snort apabila paket tersedia dan versi/dependensinya sesuai dengan rancangan:
+Jika paket tersedia dan versi serta dependensinya sesuai dengan kebutuhan penelitian, lakukan instalasi:
 
 ```bash
 sudo apt install -y snort
 ```
 
-Verifikasi versi:
+Setelah instalasi selesai, periksa versi Snort:
 
 ```bash
 snort -V
 ```
 
-<img width="1281" height="492" alt="image" src="https://github.com/user-attachments/assets/7669d5ce-b807-440c-9980-abdd14df583d" />
+Pastikan informasi versi dan build yang ditampilkan sesuai dengan paket yang terpasang. Catat versi aktual untuk kebutuhan dokumentasi dan perbandingan.
 
+**Dokumentasi:**
 
-### D.3 Konfigurasi Snort dan HOME_NET
+- Screenshot proses instalasi Snort.
+- Screenshot hasil pemeriksaan versi Snort.
 
-Periksa file konfigurasi:
+<img width="1281" height="492" alt="Instalasi dan versi Snort" src="https://github.com/user-attachments/assets/7669d5ce-b807-440c-9980-abdd14df583d" />
 
-```bash
-ls -l /etc/snort/
-```
+### D.3 Instalasi Komponen Pendukung Snort
 
-Buat salinan konfigurasi sebelum perubahan:
+Mengikuti diagram alir pada materi acuan, implementasi Snort dilanjutkan dengan instalasi komponen pendukung yang diperlukan untuk pemrosesan dan penampilan alert melalui Web BASE.
 
-```bash
-sudo cp /etc/snort/snort.conf /etc/snort/snort.conf.backup
-```
+Komponen yang disiapkan meliputi:
 
-Buka konfigurasi:
+| Komponen | Fungsi |
+|---|---|
+| Apache2 | Web server untuk menjalankan antarmuka BASE |
+| PHP | Menyediakan lingkungan pemrosesan aplikasi BASE |
+| MySQL/MariaDB | Menyimpan data alert yang diproses |
+| Barnyard2 | Memproses output Snort dan meneruskannya ke database |
 
-```bash
-sudo nano /etc/snort/snort.conf
-```
+#### 1. Pemeriksaan ketersediaan paket
 
-Sesuaikan konfigurasi jaringan internal/HOME_NET dengan jaringan laboratorium. Untuk rancangan ini, jaringan pengujian adalah:
-
-```text
-192.168.56.0/24
-```
-
-Periksa juga direktori rules dan pastikan rule yang diperlukan dimuat oleh konfigurasi.
-
-> Lokasi file dan sintaks dapat berbeda menurut versi Snort. Gunakan file konfigurasi yang benar-benar tersedia pada sistem.
-
-<img width="1278" height="292" alt="image" src="https://github.com/user-attachments/assets/ca8c349c-26c3-47de-9ecf-72a0a6133e1e" />
-
-<img width="1281" height="712" alt="image" src="https://github.com/user-attachments/assets/207c132c-6413-472b-ac7c-3c7dfa3b50c8" />
-
-<img width="1281" height="633" alt="image" src="https://github.com/user-attachments/assets/047c8714-3800-463b-94d9-2d2c14754a89" />
-
-<img width="1281" height="634" alt="image" src="https://github.com/user-attachments/assets/4f8bd269-b795-474b-9508-801c54e562ab" />
-
-<img width="1285" height="303" alt="image" src="https://github.com/user-attachments/assets/746b1007-69c7-4049-ad78-026cc2b30ec7" />
-
-### D.4 Penambahan dan pemeriksaan Rules Snort
-
-Materi menyebutkan penambahan rules sebagai bagian dari konfigurasi Snort. Periksa rule yang tersedia:
+Periksa paket yang tersedia pada repositori Linux Mint:
 
 ```bash
-ls -l /etc/snort/rules/
+apt-cache policy apache2 php mysql-server mariadb-server barnyard2
 ```
 
-Dokumentasikan:
+Pemeriksaan ini dilakukan untuk mengetahui ketersediaan paket dan versi yang dapat digunakan. Tidak semua komponen harus tersedia langsung melalui repositori bawaan.
 
-- Nama file rule.
-- Sumber rule.
-- Versi atau tanggal pembaruan.
-- Rule yang diaktifkan.
-- Tujuan rule dalam skenario pengujian.
+#### 2. Instalasi Apache2, PHP, dan database
 
-Jika menggunakan rule khusus, simpan isi rule dan jelaskan pola lalu lintas yang hendak dideteksi. Jangan mengklaim rule mendeteksi serangan sebelum diuji.
-
-<img width="1281" height="760" alt="image" src="https://github.com/user-attachments/assets/798a49d7-a2c8-4bcd-a6ff-3533af367e1c" />
-
-<img width="1282" height="577" alt="image" src="https://github.com/user-attachments/assets/97937888-7144-43d2-8566-ac984e7497f9" />
-
-
-### D.5 Instalasi komponen pendukung Web BASE
-
-Mengikuti diagram alir materi, komponen pendukung yang disiapkan adalah Apache2, PHP, MySQL, dan Barnyard2. BASE digunakan untuk menampilkan alert Snort melalui antarmuka web.
-
-Periksa ketersediaan paket terlebih dahulu:
-
-```bash
-apt-cache policy apache2 php mysql-server mariadb-server
-```
-
-Instal komponen web dan database yang tersedia serta sesuai dengan kebutuhan BASE:
+Jika paket tersedia dan sesuai dengan kebutuhan, instal komponen web serta database:
 
 ```bash
 sudo apt install -y apache2 php mysql-server
 ```
 
-Jika paket `mysql-server` tidak tersedia pada repositori, periksa alternatif database yang disediakan distribusi dan dokumentasikan pilihan aktual. Jangan mengganti komponen tanpa mencatat perbedaannya.
+Apabila `mysql-server` tidak tersedia, periksa alternatif MariaDB:
 
-Periksa layanan:
+```bash
+sudo apt install -y apache2 php mariadb-server
+```
+
+Gunakan salah satu sistem database sesuai paket yang benar-benar terpasang. Jangan memasang keduanya tanpa kebutuhan yang jelas.
+
+Periksa status Apache2:
 
 ```bash
 systemctl status apache2
+```
+
+Jika menggunakan MySQL:
+
+```bash
 systemctl status mysql
 ```
 
-> Instalasi Barnyard2 dan BASE 1.4.5 dapat memerlukan dependensi serta konfigurasi tambahan. Ikuti dokumentasi versi yang digunakan dan catat setiap perubahan. Jangan menganggap keduanya sudah terpasang hanya karena Apache2 dan database berjalan.
+Jika menggunakan MariaDB:
 
-<!-- SS D.7 — Instalasi Apache2, PHP, dan database -->
-<!-- SS D.8 — Status Apache2 dan database -->
+```bash
+systemctl status mariadb
+```
 
-### D.6 Instalasi dan konfigurasi Barnyard2
+#### 3. Instalasi Barnyard2
 
-Barnyard2 merupakan komponen pada alur implementasi artikel untuk memproses output Snort dan meneruskannya ke penyimpanan yang digunakan BASE.
+Barnyard2 digunakan untuk membaca output Snort dan meneruskannya ke sistem penyimpanan yang nantinya digunakan oleh BASE.
 
-Sebelum instalasi, periksa ketersediaan sumber paket dan dependensi:
+Periksa ketersediaan paket:
 
 ```bash
 apt-cache policy barnyard2
 ```
 
-Jika paket tidak tersedia, dokumentasikan metode instalasi yang dipilih, sumber paket, versi, dan dependensinya. Jangan menggunakan paket yang tidak jelas asalnya.
+Jika tersedia dan sesuai, instal:
 
-Setelah tersedia, lakukan konfigurasi sesuai format output Snort dan database yang dipakai. Pastikan parameter database, lokasi spool/output, serta hak akses sesuai dengan konfigurasi aktual.
+```bash
+sudo apt install -y barnyard2
+```
 
-<!-- SS D.9 — Instalasi Barnyard2 -->
-<!-- SS D.10 — Konfigurasi Barnyard2 -->
+Jika tidak tersedia, dokumentasikan metode instalasi alternatif, sumber paket, versi, serta dependensi yang digunakan. Jangan menggunakan paket yang tidak jelas asal-usulnya.
 
-### D.7 Instalasi dan konfigurasi BASE
+Konfigurasi integrasi Barnyard2 dengan output Snort dan database dijelaskan pada bagian D.7.
 
-Materi acuan menyebut BASE versi 1.4.5 untuk menyimpan/menampilkan alert melalui Web BASE. Siapkan BASE sesuai versi dan dependensi yang kompatibel dengan sistem.
+**Dokumentasi:**
 
-Pastikan:
+- Screenshot instalasi Apache2, PHP, dan database.
+- Screenshot status layanan Apache2 dan database.
+- Screenshot instalasi Barnyard2 apabila berhasil dilakukan.
 
-1. Apache2 berjalan.
-2. PHP dan ekstensi yang dibutuhkan tersedia.
-3. Database telah dibuat dan dapat diakses.
-4. Output Snort dapat dibaca oleh Barnyard2.
-5. BASE terhubung ke database yang benar.
+> Status komponen harus dicatat berdasarkan pemeriksaan aktual. Instalasi Apache2 dan database saja belum membuktikan bahwa integrasi Barnyard2 dan BASE telah berhasil.
 
-Setelah konfigurasi, akses antarmuka BASE melalui browser menggunakan alamat lokal sesuai konfigurasi Apache2.
+### D.4 Konfigurasi Snort dan Penyiapan Rules
 
-> Jangan menuliskan status “BASE berhasil” sebelum halaman BASE dapat dibuka dan alert hasil pengujian benar-benar tampil. Jika BASE 1.4.5 tidak kompatibel dengan lingkungan aktual, catat kendalanya sebagai keterbatasan implementasi. Jangan diam-diam mengganti BASE dengan dashboard lain karena hal tersebut mengubah komponen pada prosedur acuan.
+Setelah Snort dan komponen pendukung disiapkan, tahap berikutnya adalah mengonfigurasi Snort agar dapat memantau jaringan laboratorium dan menggunakan rules yang sesuai dengan kebutuhan pengujian.
 
-<!-- SS D.11 — Konfigurasi database BASE -->
-<!-- SS D.12 — Halaman Web BASE -->
-<!-- SS D.13 — Alert Snort yang tampil pada BASE -->
+#### 1. Pemeriksaan direktori konfigurasi
 
-### D.8 Pengujian konfigurasi Snort
+Periksa direktori konfigurasi Snort:
 
-Jalankan pemeriksaan konfigurasi:
+```bash
+ls -l /etc/snort/
+```
+
+Buat salinan cadangan file konfigurasi sebelum melakukan perubahan:
+
+```bash
+sudo cp /etc/snort/snort.conf /etc/snort/snort.conf.backup
+```
+
+Buka file konfigurasi:
+
+```bash
+sudo nano /etc/snort/snort.conf
+```
+
+> Lokasi file konfigurasi dapat berbeda bergantung pada metode instalasi dan versi Snort yang digunakan. Gunakan lokasi aktual pada sistem.
+
+#### 2. Konfigurasi HOME_NET
+
+HOME_NET merupakan variabel yang digunakan Snort untuk menentukan jaringan internal yang dipantau.
+
+Sesuaikan nilai HOME_NET dengan subnet laboratorium:
+
+```text
+192.168.56.0/24
+```
+
+Penetapan tersebut sesuai dengan jaringan LAN Segment 1 yang menghubungkan Kali Linux sebagai attacker dan Linux Mint sebagai target sekaligus sensor IDS.
+
+<img width="1278" height="292" alt="Konfigurasi HOME_NET" src="https://github.com/user-attachments/assets/ca8c349c-26c3-47de-9ecf-72a0a6133e1e" />
+
+#### 3. Pemeriksaan konfigurasi rules
+
+Pada file `snort.conf`, periksa bagian konfigurasi rules dan baris `include` yang digunakan untuk memuat file rules.
+
+Baris konfigurasi yang aktif digunakan untuk memanggil file rules, sedangkan baris yang diawali karakter `#` merupakan komentar sehingga tidak dijalankan sebagai perintah konfigurasi.
+
+Pastikan file rules yang diperlukan untuk skenario penelitian telah dimasukkan sesuai lokasi direktori yang tersedia.
+
+<img width="1281" height="712" alt="Konfigurasi include rules bagian pertama" src="https://github.com/user-attachments/assets/207c132c-6413-472b-ac7c-3c7dfa3b50c8" />
+
+<img width="1281" height="633" alt="Konfigurasi include rules bagian kedua" src="https://github.com/user-attachments/assets/047c8714-3800-463b-94d9-2d2c14754a89" />
+
+<img width="1281" height="634" alt="Konfigurasi include rules bagian ketiga" src="https://github.com/user-attachments/assets/4f8bd269-b795-474b-9508-801c54e562ab" />
+
+#### 4. Pemeriksaan direktori rules
+
+Periksa daftar file rules yang tersedia:
+
+```bash
+ls -l /etc/snort/rules/
+```
+
+Pemeriksaan ini bertujuan mengetahui file rules yang tersedia pada direktori Snort.
+
+Dokumentasikan informasi berikut:
+
+- Nama file rules.
+- Sumber rules.
+- Versi atau tanggal pembaruan, jika diketahui.
+- File rules yang dimuat melalui konfigurasi `snort.conf`.
+- Tujuan penggunaan rules dalam skenario pengujian.
+
+Perlu diperhatikan bahwa keberadaan file dalam direktori `/etc/snort/rules/` tidak otomatis berarti file tersebut aktif. File harus dipanggil melalui konfigurasi `include`. Selain itu, aturan individual di dalam file juga dapat dinonaktifkan melalui komentar.
+
+Jika menggunakan rules khusus, dokumentasikan isi dan tujuan rules tersebut. Jangan menyimpulkan suatu rules mampu mendeteksi serangan sebelum dilakukan pengujian.
+
+<img width="1281" height="760" alt="Daftar file rules Snort bagian pertama" src="https://github.com/user-attachments/assets/798a49d7-a2c8-4bcd-a6ff-3533af367e1c" />
+
+<img width="1282" height="577" alt="Daftar file rules Snort bagian kedua" src="https://github.com/user-attachments/assets/97937888-7144-43d2-8566-ac984e7497f9" />
+
+**Dokumentasi:**
+
+- Screenshot konfigurasi HOME_NET.
+- Screenshot bagian `include` pada `snort.conf`.
+- Screenshot daftar file rules dari direktori `/etc/snort/rules/`.
+
+### D.5 Pengujian Konfigurasi Snort
+
+Setelah konfigurasi jaringan dan rules selesai disiapkan, lakukan pemeriksaan untuk memastikan Snort dapat membaca file konfigurasi dan rules tanpa kesalahan fatal.
+
+Jalankan perintah:
 
 ```bash
 sudo snort -T -c /etc/snort/snort.conf
 ```
 
-Jika pemeriksaan gagal:
+Opsi `-T` digunakan untuk menguji konfigurasi tanpa menjalankan pemantauan lalu lintas secara normal.
 
-1. Baca pesan error.
-2. Periksa sintaks konfigurasi.
+Perhatikan pesan yang ditampilkan pada terminal.
+
+Jika pengujian gagal:
+
+1. Periksa pesan kesalahan yang ditampilkan.
+2. Periksa sintaks pada `snort.conf`.
 3. Periksa lokasi dan nama file rules.
-4. Periksa HOME_NET dan interface.
-5. Perbaiki konfigurasi.
-6. Ulangi pemeriksaan sampai tidak ada error fatal.
+4. Periksa konfigurasi HOME_NET.
+5. Periksa dependensi dan kompatibilitas rules.
+6. Perbaiki kesalahan, kemudian ulangi pengujian.
 
-Jika pemeriksaan berhasil, lanjutkan ke pengoperasian Snort.
+Jika pengujian berhasil, konfigurasi Snort dinyatakan lolos pemeriksaan dan implementasi dapat dilanjutkan ke tahap instalasi BASE.
 
-<!-- SS D.14 — Hasil pengujian konfigurasi Snort -->
+**Dokumentasi:**
 
-### D.9 Persiapan interface pemantauan
+- Screenshot hasil pengujian konfigurasi Snort menggunakan `snort -T`.
 
-Interface LAN Linux Mint yang digunakan:
+### D.6 Instalasi BASE
 
-```text
-ens37
-```
+BASE (Basic Analysis and Security Engine) merupakan antarmuka berbasis web yang digunakan untuk menampilkan dan memeriksa alert Snort melalui browser.
 
-Periksa opsi Snort sesuai versi:
+Materi acuan menggunakan BASE versi 1.4.5. Oleh karena itu, versi tersebut dijadikan acuan dalam pengembangan implementasi ini.
+
+Sebelum instalasi, periksa ketersediaan sumber BASE dan dependensi yang diperlukan. Pastikan versi PHP, database, serta Apache2 yang digunakan sesuai dengan kebutuhan aplikasi.
+
+Jika BASE 1.4.5 tidak tersedia melalui repositori, metode instalasi harus mengikuti sumber distribusi atau dokumentasi versi yang digunakan. Catat sumber, versi, dan penyesuaian dependensi yang dilakukan.
+
+Jangan menganggap BASE telah terinstal hanya karena Apache2, PHP, dan database sudah berjalan.
+
+**Dokumentasi:**
+
+- Screenshot proses pengambilan atau instalasi BASE.
+- Screenshot versi atau berkas BASE yang digunakan, apabila tersedia.
+
+> Apabila BASE 1.4.5 mengalami kendala kompatibilitas dengan Linux Mint 22.3, dokumentasikan kendala tersebut. Jangan mengganti BASE dengan dashboard lain tanpa menjelaskan bahwa terdapat perubahan dari komponen pada materi acuan.
+
+### D.7 Konfigurasi dan Pengujian Web BASE
+
+Setelah BASE disiapkan, lakukan konfigurasi agar aplikasi dapat terhubung ke database dan menampilkan data alert yang dihasilkan Snort.
+
+#### 1. Persiapan database
+
+Siapkan database khusus untuk menyimpan data alert. Konfigurasikan nama database, akun pengguna, kata sandi, dan hak akses sesuai kebutuhan instalasi.
+
+Pastikan database dapat diakses oleh komponen yang digunakan. Jangan mencantumkan kata sandi atau informasi autentikasi asli ke dalam README publik.
+
+#### 2. Konfigurasi Barnyard2
+
+Sesuaikan konfigurasi Barnyard2 dengan output Snort dan database yang telah disiapkan.
+
+Pastikan parameter berikut sesuai dengan kondisi aktual:
+
+- Lokasi output atau spool Snort.
+- Format output yang digunakan Snort.
+- Lokasi file konfigurasi Barnyard2.
+- Nama database.
+- Akun pengguna database.
+- Hak akses koneksi database.
+
+Setelah konfigurasi selesai, jalankan Barnyard2 sesuai metode pengoperasian yang digunakan dan periksa apakah proses dapat membaca output Snort serta meneruskan data ke database.
+
+#### 3. Konfigurasi BASE
+
+Sesuaikan konfigurasi BASE agar dapat terhubung ke database yang telah disiapkan.
+
+Periksa kembali:
+
+- Alamat server database.
+- Nama database.
+- Akun pengguna database.
+- Hak akses database.
+- Konfigurasi Apache2 dan PHP.
+- Lokasi direktori aplikasi BASE.
+
+#### 4. Pengujian antarmuka Web BASE
+
+Pastikan layanan Apache2 dan database berjalan. Kemudian akses alamat Web BASE melalui browser sesuai konfigurasi Apache2.
+
+Lakukan pemeriksaan berikut:
+
+1. Halaman BASE dapat diakses.
+2. BASE dapat terhubung ke database.
+3. Data alert dapat dibaca.
+4. Alert Snort dari pengujian dapat ditampilkan pada halaman BASE.
+
+Apabila halaman BASE tidak dapat diakses atau alert tidak tampil, periksa konfigurasi Apache2, PHP, database, Barnyard2, output Snort, dan hak akses yang digunakan.
+
+Keberhasilan instalasi BASE tidak hanya ditentukan oleh halaman web yang dapat dibuka, tetapi juga oleh keberhasilan integrasi data alert Snort hingga tampil pada antarmuka BASE.
+
+**Dokumentasi:**
+
+- Screenshot konfigurasi database BASE.
+- Screenshot konfigurasi Barnyard2.
+- Screenshot halaman Web BASE.
+- Screenshot alert Snort yang berhasil ditampilkan pada BASE, jika pengujian berhasil.
+
+### D.8 Implementasi Suricata sebagai Pengembangan
+
+Suricata ditambahkan setelah implementasi dasar Snort untuk memperluas penelitian menjadi analisis perbandingan. Penambahan ini bukan bagian dari komponen utama pada materi acuan.
+
+Periksa paket:
 
 ```bash
-snort --help
+apt-cache policy suricata
 ```
 
-Jalankan Snort dalam mode IDS/passive detection pada interface pengujian. Perintah final harus mengikuti sintaks versi Snort yang benar-benar terpasang dan lokasi output alert aktual.
+Instal:
 
-<!-- SS D.15 — Snort berjalan dan memantau ens37 -->
+```bash
+sudo apt install -y suricata
+```
+
+Periksa versi:
+
+```bash
+suricata -V
+```
+
+Cadangkan konfigurasi:
+
+```bash
+sudo cp /etc/suricata/suricata.yaml /etc/suricata/suricata.yaml.backup
+```
+
+Buka konfigurasi:
+
+```bash
+sudo nano /etc/suricata/suricata.yaml
+```
+
+Sesuaikan HOME_NET dan interface sesuai jaringan laboratorium. Interface pengujian adalah `ens37`.
+
+Periksa dan perbarui rules jika `suricata-update` tersedia:
+
+```bash
+suricata-update --version
+sudo suricata-update
+```
+
+Uji konfigurasi:
+
+```bash
+sudo suricata -T -c /etc/suricata/suricata.yaml
+```
+
+Periksa opsi yang tersedia:
+
+```bash
+suricata --help
+```
+
+Jalankan dalam mode IDS/passive detection. Catat versi, sumber rules, HOME_NET, interface, dan lokasi log.
+
+**Dokumentasi:**
+
+- Screenshot versi dan konfigurasi Suricata.
+- Screenshot hasil pengujian konfigurasi Suricata.
+
+### D.9 Kriteria Penyelesaian Implement
+
+- Snort telah terpasang dan versinya tercatat.
+- Komponen pendukung Snort telah diperiksa dan status aktualnya dicatat.
+- HOME_NET dan konfigurasi rules telah disesuaikan dengan jaringan laboratorium.
+- Konfigurasi Snort lolos pemeriksaan atau kendalanya telah didokumentasikan.
+- BASE dan integrasinya dengan Snort telah diuji, atau kendala kompatibilitasnya telah dicatat.
+- Suricata telah disiapkan sebagai komponen pengembangan dan konfigurasi telah diuji.
 
 ### D.10 Implementasi Suricata sebagai pengembangan
 
