@@ -94,7 +94,8 @@ Catat hasil aktual:
 | Versi                 | 22.3 (Zena)         |
 | Kernel saat persiapan | `6.14.0-37-generic` |
 
-<!-- SS A.1 — Informasi distribusi dan kernel Linux Mint -->
+<img width="1281" height="321" alt="image" src="https://github.com/user-attachments/assets/4996752d-5c29-4a5f-b5be-7ff02b72da82" />
+
 
 ### A.4 Periksa sumber daya mesin
 
@@ -106,7 +107,8 @@ lsblk -f
 
 Catat kapasitas RAM, ruang penyimpanan, dan disk virtual. Informasi ini menjadi kondisi awal sebelum IDS dijalankan.
 
-<!-- SS A.2 — Hasil pemeriksaan RAM dan penyimpanan -->
+<img width="1281" height="301" alt="image" src="https://github.com/user-attachments/assets/9634a7a1-c4d2-44f3-84fa-748cb275525b" />
+
 
 ### A.5 Perbarui sistem dan pasang utilitas awal
 
@@ -135,7 +137,8 @@ Fungsi utilitas:
 
 Jika APT menampilkan sumber `cdrom://`, periksa **Software Sources** dan pastikan media instalasi tidak lagi menjadi sumber repositori aktif pada instalasi permanen.
 
-<!-- SS A.3 — Pembaruan sistem dan instalasi utilitas -->
+<img width="1283" height="511" alt="Cuplikan layar 2026-11-14 113519" src="https://github.com/user-attachments/assets/559ab47c-75d0-42a2-8557-9fec24336fa1" />
+
 
 ### A.6 Pemeriksaan awal konektivitas
 
@@ -153,8 +156,10 @@ ping -c 4 192.168.56.10
 
 Koneksi antar-VM harus berhasil sebelum tahap desain dan implementasi dilanjutkan.
 
-<!-- SS A.4 — Ping Kali menuju Linux Mint -->
-<!-- SS A.5 — Ping Linux Mint menuju Kali -->
+<img width="1277" height="257" alt="image" src="https://github.com/user-attachments/assets/42af2aea-277e-4c6f-8bc0-ed6afe571853" />
+
+<img width="1281" height="237" alt="image" src="https://github.com/user-attachments/assets/e6970b9e-909a-40c9-b400-dbd3b2799f5b" />
+
 
 ### A.7 Kriteria penyelesaian Prepare
 
