@@ -195,12 +195,13 @@ Pengembangan pada lingkungan aktual:
 
 | Komponen           | Lingkungan aktual                       | Fungsi                |
 |:-------------------|:----------------------------------------|:----------------------|
-| VMware Workstation | Versi terpasang dicatat saat penelitian | Menjalankan VM        |
+| VMware Workstation Pro 26H1 | 26.0.0.25388281 | Menjalankan VM        |
 | Linux Mint         | 22.3 (Zena)                             | Target dan sensor IDS |
-| Kali Linux         | Versi terpasang dicatat saat penelitian | Attacker              |
-| Suricata           | Versi terpasang dicatat saat penelitian | IDS pembanding        |
-| tcpdump            | Versi paket terpasang                   | Merekam PCAP          |
-| Wireshark          | Versi terpasang dicatat saat penelitian | Analisis paket        |
+| Kali Linux         | 6.19.14+kali-amd64 | Attacker              |
+| Suricata           | 7.0.3 | IDS pembanding        |
+| tcpdump            | 4.99.4                   | Merekam PCAP          |
+| Wireshark          | 4.6.4 (v4.6.4-0-g93282876538d) | Analisis paket        |
+| Snort              | 2.9.20 GRE (Build 82)                   | Menangkap dan mendeteksi serangan yang masuk       |
 
 ### B.3 Rencana perangkat keras/virtual
 
@@ -209,7 +210,12 @@ Pengembangan pada lingkungan aktual:
 | Linux Mint | Server/target + IDS | `192.168.56.20/24`    |
 | Kali Linux | Penyerang           | `192.168.56.10/24`    |
 
-Spesifikasi vCPU, RAM, dan disk masing-masing VM harus dicatat dari konfigurasi VMware. Jangan mengisi spesifikasi yang belum diperiksa.
+
+| Komponen | Kali Linux | Linux Mint | Windows Host   |
+| -------- | ---------- | ---------- | -------------- |
+| Storage  | 25 GB      | 30 GB      | Sisa kapasitas |
+| RAM      | 4 GB       | 4 GB       | Sisa RAM       |
+| CPU      | 2 Core     | 2 Core     | Prosesor host  |
 
 ### B.4 Rencana prosedur pengujian
 
