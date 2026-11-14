@@ -299,9 +299,13 @@ Keterangan:
 - Snort atau Suricata memantau interface `ens37` secara bergantian.
 - Wireshark digunakan untuk menganalisis hasil perekaman paket.
 
-<!-- SS C.1 — Konfigurasi Network Adapter Kali Linux di VMware -->
-<!-- SS C.2 — Konfigurasi Network Adapter Linux Mint di VMware -->
-<!-- SS C.3 — Topologi jaringan LAN Segment 1 -->
+
+
+<img width="426" height="55" alt="image" src="https://github.com/user-attachments/assets/36d18db0-9b10-41be-bdc9-dc26de0515f9" />
+
+<img width="435" height="54" alt="image" src="https://github.com/user-attachments/assets/0aa9dd56-1b50-4144-abd7-a77556c79265" />
+
+<img width="389" height="54" alt="image" src="https://github.com/user-attachments/assets/aa4772ba-b7b0-4393-bf5e-c9f506a2a947" />
 
 ### C.3 Verifikasi interface Kali Linux
 
@@ -317,7 +321,8 @@ Rencana interface:
 | `eth0`    | NAT / Internet | Periksa hasil aktual |
 | `eth1`    | LAN Segment 1  | `192.168.56.10/24`   |
 
-<!-- SS C.4 — Output ip -br addr dan ip route Kali Linux -->
+<img width="1282" height="338" alt="image" src="https://github.com/user-attachments/assets/36ae5a44-c188-4070-92d4-c949db07c937" />
+
 
 ### C.4 Verifikasi interface Linux Mint
 
@@ -335,7 +340,8 @@ Rencana interface:
 
 Interface LAN tidak menggunakan default gateway. Default route internet menggunakan interface NAT.
 
-<!-- SS C.5 — Output ip -br addr dan ip route Linux Mint -->
+<img width="1281" height="202" alt="image" src="https://github.com/user-attachments/assets/666c30e0-105e-4332-a569-fd3da5a38b2a" />
+
 
 ### C.5 Penetapan target dan layanan
 
