@@ -498,6 +498,8 @@ Jika menggunakan MariaDB:
 systemctl status mariadb
 ```
 
+<img width="1281" height="675" alt="image" src="https://github.com/user-attachments/assets/f7132133-e69c-4c00-abbb-f562197efcf9" />
+
 #### 3. Instalasi Barnyard2
 
 Barnyard2 digunakan untuk membaca output Snort dan meneruskannya ke sistem penyimpanan yang nantinya digunakan oleh BASE.
@@ -515,6 +517,8 @@ sudo apt install -y barnyard2
 ```
 
 Jika tidak tersedia, dokumentasikan metode instalasi alternatif, sumber paket, versi, serta dependensi yang digunakan. Jangan menggunakan paket yang tidak jelas asal-usulnya.
+
+<img width="1283" height="300" alt="image" src="https://github.com/user-attachments/assets/a498be4e-6f5d-48e0-a509-256591c14441" />
 
 Konfigurasi integrasi Barnyard2 dengan output Snort dan database dijelaskan pada bagian D.7.
 
