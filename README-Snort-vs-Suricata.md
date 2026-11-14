@@ -434,11 +434,6 @@ snort -V
 
 Pastikan informasi versi dan build yang ditampilkan sesuai dengan paket yang terpasang. Catat versi aktual untuk kebutuhan dokumentasi dan perbandingan.
 
-**Dokumentasi:**
-
-- Screenshot proses instalasi Snort.
-- Screenshot hasil pemeriksaan versi Snort.
-
 <img width="1281" height="492" alt="Instalasi dan versi Snort" src="https://github.com/user-attachments/assets/7669d5ce-b807-440c-9980-abdd14df583d" />
 
 ### D.3 Instalasi Komponen Pendukung Snort
@@ -466,7 +461,7 @@ Pemeriksaan ini dilakukan untuk mengetahui ketersediaan paket dan versi yang dap
 
 #### 2. Instalasi Apache2, PHP, dan database
 
-Jika paket tersedia dan sesuai dengan kebutuhan, instal komponen web serta database:
+Instal komponen web serta database sesuai paket yang tersedia:
 
 ```bash
 sudo apt install -y apache2 php mysql-server
@@ -498,11 +493,11 @@ Jika menggunakan MariaDB:
 systemctl status mariadb
 ```
 
-<img width="1281" height="675" alt="image" src="https://github.com/user-attachments/assets/f7132133-e69c-4c00-abbb-f562197efcf9" />
+<img width="1281" height="675" alt="Instalasi komponen Apache2, PHP, dan database" src="https://github.com/user-attachments/assets/f7132133-e69c-4c00-abbb-f562197efcf9" />
 
-#### 3. Instalasi Barnyard2
+#### 3. Instalasi Barnyard2 dari Source Code
 
-Barnyard2 digunakan untuk membaca output Snort dan meneruskannya ke sistem penyimpanan yang nantinya digunakan oleh BASE.
+Berdasarkan hasil pemeriksaan repositori, paket Barnyard2 tidak tersedia untuk dipasang secara langsung melalui APT. Oleh karena itu, instalasi dilakukan dengan mengompilasi source code dari repositori GitHub.
 
 Periksa ketersediaan paket:
 
@@ -510,25 +505,72 @@ Periksa ketersediaan paket:
 apt-cache policy barnyard2
 ```
 
-Jika tersedia dan sesuai, instal:
+Unduh source code Barnyard2:
 
 ```bash
-sudo apt install -y barnyard2
+git clone https://github.com/firnsy/barnyard2.git
+cd barnyard2
 ```
 
-Jika tidak tersedia, dokumentasikan metode instalasi alternatif, sumber paket, versi, serta dependensi yang digunakan. Jangan menggunakan paket yang tidak jelas asal-usulnya.
+Pasang dependensi yang diperlukan untuk proses kompilasi:
 
-<img width="1283" height="300" alt="image" src="https://github.com/user-attachments/assets/a498be4e-6f5d-48e0-a509-256591c14441" />
+```bash
+sudo apt install -y libtool autoconf automake libpcap-dev libmariadb-dev libmariadb-dev-compat libdaq-dev libdumbnet-dev
+```
+
+Jalankan proses persiapan dan konfigurasi:
+
+```bash
+./autogen.sh
+```
+
+```bash
+./configure --with-mysql \
+--with-mysql-includes=/usr/include/mariadb \
+--with-mysql-libraries=/usr/lib/x86_64-linux-gnu
+```
+
+Pada proses kompilasi, dilakukan penyesuaian kompatibilitas terhadap source code Barnyard2, yaitu penghapusan deklarasi `typedef int SOCKET;` yang bertentangan dengan definisi tipe pada header sistem serta penyediaan nama header `dnet.h` melalui symbolic link ke `dumbnet.h`.
+
+Setelah dependensi dan konfigurasi terpenuhi, lakukan kompilasi:
+
+```bash
+make
+```
+
+Jika kompilasi berhasil, pasang Barnyard2:
+
+```bash
+sudo make install
+```
+
+Verifikasi hasil instalasi dan versi Barnyard2:
+
+```bash
+barnyard2 -V
+```
+
+Hasil verifikasi menunjukkan:
+
+```text
+Barnyard2
+Version 2.1.14 (Build 337)
+By Ian Firns (SecurixLive)
+```
+
+Executable Barnyard2 terpasang pada:
+
+```text
+/usr/local/bin/barnyard2
+```
+
+Dengan demikian, instalasi Barnyard2 berhasil dilakukan melalui source code meskipun paketnya tidak tersedia pada repositori APT.
 
 Konfigurasi integrasi Barnyard2 dengan output Snort dan database dijelaskan pada bagian D.7.
 
-**Dokumentasi:**
+<img width="1283" height="300" alt="image" src="https://github.com/user-attachments/assets/f3466dbb-34f8-41d9-b50c-d287be7382d8" />
 
-- Screenshot instalasi Apache2, PHP, dan database.
-- Screenshot status layanan Apache2 dan database.
-- Screenshot instalasi Barnyard2 apabila berhasil dilakukan.
-
-> Status komponen harus dicatat berdasarkan pemeriksaan aktual. Instalasi Apache2 dan database saja belum membuktikan bahwa integrasi Barnyard2 dan BASE telah berhasil.
+> Status komponen harus dicatat berdasarkan pemeriksaan aktual. Keberhasilan instalasi Barnyard2 belum membuktikan bahwa integrasi Snort, database, dan BASE telah berhasil.
 
 ### D.4 Konfigurasi Snort dan Penyiapan Rules
 
@@ -610,12 +652,6 @@ Jika menggunakan rules khusus, dokumentasikan isi dan tujuan rules tersebut. Jan
 
 <img width="1282" height="577" alt="Daftar file rules Snort bagian kedua" src="https://github.com/user-attachments/assets/97937888-7144-43d2-8566-ac984e7497f9" />
 
-**Dokumentasi:**
-
-- Screenshot konfigurasi HOME_NET.
-- Screenshot bagian `include` pada `snort.conf`.
-- Screenshot daftar file rules dari direktori `/etc/snort/rules/`.
-
 ### D.5 Pengujian Konfigurasi Snort
 
 Setelah konfigurasi jaringan dan rules selesai disiapkan, lakukan pemeriksaan untuk memastikan Snort dapat membaca file konfigurasi dan rules tanpa kesalahan fatal.
@@ -641,9 +677,8 @@ Jika pengujian gagal:
 
 Jika pengujian berhasil, konfigurasi Snort dinyatakan lolos pemeriksaan dan implementasi dapat dilanjutkan ke tahap instalasi BASE.
 
-**Dokumentasi:**
+<img width="1283" height="746" alt="image" src="https://github.com/user-attachments/assets/8ef7bb15-c1da-4ce0-a6bb-850a08cc172a" />
 
-- Screenshot hasil pengujian konfigurasi Snort menggunakan `snort -T`.
 
 ### D.6 Instalasi BASE
 
@@ -656,11 +691,6 @@ Sebelum instalasi, periksa ketersediaan sumber BASE dan dependensi yang diperluk
 Jika BASE 1.4.5 tidak tersedia melalui repositori, metode instalasi harus mengikuti sumber distribusi atau dokumentasi versi yang digunakan. Catat sumber, versi, dan penyesuaian dependensi yang dilakukan.
 
 Jangan menganggap BASE telah terinstal hanya karena Apache2, PHP, dan database sudah berjalan.
-
-**Dokumentasi:**
-
-- Screenshot proses pengambilan atau instalasi BASE.
-- Screenshot versi atau berkas BASE yang digunakan, apabila tersedia.
 
 > Apabila BASE 1.4.5 mengalami kendala kompatibilitas dengan Linux Mint 22.3, dokumentasikan kendala tersebut. Jangan mengganti BASE dengan dashboard lain tanpa menjelaskan bahwa terdapat perubahan dari komponen pada materi acuan.
 
